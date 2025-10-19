@@ -156,7 +156,3 @@ DynamicChartVisualizer/
 --
 ---
 
-
-
-MIT License © 2025  
-Bu proje kişisel geliştirme ve eğitim amacıyla paylaşılmıştır.
