@@ -7,7 +7,7 @@ namespace DynamicChartVisualizer.Core.Helpers
 {
     public static class EncryptionHelper
     {
-        private static readonly string Key = "DynamicChartKey123!"; // 16 karakter
+        private static readonly string Key = "DynamicChartKey123!"; 
 
         public static string Encrypt(string plainText)
         {

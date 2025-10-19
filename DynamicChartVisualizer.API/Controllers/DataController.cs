@@ -20,7 +20,7 @@ namespace DynamicChartVisualizer.API.Controllers
         [HttpPost("execute-sp")]
         public async Task<IActionResult> ExecuteSP([FromBody] SPRequest request)
         {
-            var requestId = Guid.NewGuid().ToString("N"); // 🔹 Hata takibi için ID
+            var requestId = Guid.NewGuid().ToString("N"); 
             var sw = Stopwatch.StartNew();
 
             try
@@ -59,7 +59,7 @@ namespace DynamicChartVisualizer.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "💥 [Request:{reqId}] Genel hata oluştu: {msg}", requestId, ex.Message);
+                _logger.LogError(ex, "[Request:{reqId}] Genel hata oluştu: {msg}", requestId, ex.Message);
                 return BadRequest(new
                 {
                     error = "Beklenmeyen bir hata oluştu. Hata kimliği: " + requestId,
@@ -82,11 +82,5 @@ namespace DynamicChartVisualizer.API.Controllers
             }
             return string.Join(';', parts);
         }
-    }
-
-    public class SPRequest
-    {
-        public string ConnectionString { get; set; }
-        public string StoredProcedureName { get; set; }
     }
 }

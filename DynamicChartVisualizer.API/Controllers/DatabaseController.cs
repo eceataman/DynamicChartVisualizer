@@ -9,7 +9,7 @@ namespace DynamicChartVisualizer.API.Controllers
         [HttpGet("ping")]
         public IActionResult Ping()
         {
-            return Ok(new { message = "API is working 🚀" });
+            return Ok(new { message = "API is working" });
         }
     }
 }

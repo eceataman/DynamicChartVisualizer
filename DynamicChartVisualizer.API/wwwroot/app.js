@@ -1,6 +1,15 @@
 ﻿let fetchedData = [];
-let chartCount = 1;
-
+$("#themeToggle").change(function () {
+    if (this.checked) {
+        $("body").css({ "background-color": "#212529", "color": "#f8f9fa" });
+        $(".container").css("background-color", "#2c2f33");
+        $("table").removeClass("table-striped").addClass("table-dark");
+    } else {
+        $("body").css({ "background-color": "#f4f6f9", "color": "black" });
+        $(".container").css("background-color", "white");
+        $("table").removeClass("table-dark").addClass("table-striped");
+    }
+});
 $("#btnFetch").click(function () {
     const connStr = $("#connectionString").val();
     const spName = $("#spName").val();
@@ -25,29 +34,27 @@ $("#btnFetch").click(function () {
             }
 
             fetchedData = data;
-
             const keys = Object.keys(data[0]);
+
             $("#xField, #yField").empty();
             keys.forEach(k => {
                 $("#xField").append(`<option value="${k}">${k}</option>`);
                 $("#yField").append(`<option value="${k}">${k}</option>`);
             });
 
-            // 🔹 Veri tablosu oluştur
             const tableHead = keys.map(k => `<th>${k}</th>`).join("");
             const tableRows = data.map(row => {
                 return `<tr>${keys.map(k => `<td>${row[k]}</td>`).join("")}</tr>`;
             }).join("");
             $("#dataPreview").html(`<thead><tr>${tableHead}</tr></thead><tbody>${tableRows}</tbody>`);
             $("#tableContainer").show();
-
             $("#mappingArea").show();
 
-            // 🔹 Tablo satırına tıklayınca otomatik alan seçimi
+            // Hücreye tıklayarak alan seçimi
             $("#dataPreview td").click(function () {
                 const colIndex = $(this).index();
                 const field = keys[colIndex];
-                if ($("#xField").val() === "") {
+                if (!$("#xField").val()) {
                     $("#xField").val(field);
                 } else {
                     $("#yField").val(field);
@@ -65,6 +72,7 @@ $("#btnDraw").click(function () {
     const chartType = $("#chartType").val();
     const xKey = $("#xField").val();
     const yKey = $("#yField").val();
+    const chartColor = $("#chartColor").val();
 
     if (!xKey || !yKey) {
         alert("X ve Y alanlarını seçmelisiniz!");
@@ -74,24 +82,33 @@ $("#btnDraw").click(function () {
     const labels = fetchedData.map(x => x[xKey]);
     const values = fetchedData.map(x => x[yKey]);
 
-    const canvasId = "chartCanvas" + chartCount;
-    $("#chartContainer").append(`<canvas id="${canvasId}" class="chartCanvas" width="400" height="200"></canvas>`);
-    const ctx = document.getElementById(canvasId).getContext("2d");
+    const chartId = `chart_${Date.now()}`;
+    $("#chartContainer").append(`
+        <div class="mt-4 p-3 border rounded bg-light-subtle">
+            <h6>${xKey} - ${yKey} (${chartType.toUpperCase()})</h6>
+            <canvas id="${chartId}" height="400"></canvas>
+            <button class="btn btn-sm btn-outline-secondary mt-2" onclick="downloadChart('${chartId}')">⬇️ Grafiği İndir</button>
+        </div>
+    `);
+
+    const ctx = document.getElementById(chartId).getContext("2d");
 
     new Chart(ctx, {
         type: chartType,
         data: {
             labels: labels,
             datasets: [{
-                label: `${yKey}`,
+                label: yKey,
                 data: values,
-                backgroundColor: "rgba(75, 192, 192, 0.5)",
-                borderColor: "rgba(75, 192, 192, 1)",
+                backgroundColor: `${chartColor}80`,
+                borderColor: chartColor,
                 borderWidth: 2
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: true,
+            animation: false,
             plugins: {
                 legend: { display: true },
                 title: {
@@ -102,7 +119,16 @@ $("#btnDraw").click(function () {
             scales: { y: { beginAtZero: true } }
         }
     });
-
-    chartCount++;
 });
 
+function downloadChart(chartId) {
+    const link = document.createElement("a");
+    link.download = `${chartId}.png`;
+    link.href = document.getElementById(chartId).toDataURL("image/png");
+    link.click();
+}
+$("#btnClear").click(function () {
+    if (confirm("Tüm grafikleri silmek istediğine emin misin?")) {
+        $("#chartContainer").empty();
+    }
+});
