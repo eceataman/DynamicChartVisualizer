@@ -3,8 +3,7 @@
 Bu proje, MSSQL veritabanındaki Stored Procedure (SP), View veya Function çıktılarının dinamik olarak görselleştirilebilmesini sağlar.  
 Kullanıcı, bağlantı bilgisini girip SP adını belirttiğinde veriler tablo halinde ve farklı **grafik tiplerinde (Bar, Line, Radar)** Chart.js ile görselleştirilebilir.
 
----
-##Giriş Bilgileri
+## Giriş Bilgileri
 Server:   Server=ECE\MSSQLSERVER02;Database=TestDB;Trusted_Connection=True;TrustServerCertificate=True;
 Stored Procedure Name: GetSalesSummary
 
@@ -106,36 +105,12 @@ POST https://localhost:7296/api/data/execute-sp
 📂 `wwwroot` klasöründe veya `index.html` dosyasında  
 tarayıcıyla açarak uygulamayı kullan.
 
----
 
-## 🔑 API Kullanımı
-
-### 🔹 İstek Formatı
-
-```json
-{
-  "ConnectionString": "Server=localhost;Database=TestDB;User Id=sa;Password=12345;",
-  "StoredProcedureName": "GetSalesSummary"
-}
-```
-
-> Frontend tarafında bu bağlantı otomatik olarak AES ile şifrelenir.  
-> API Key doğrulaması yapılır (`X-API-KEY` header’ı).
-
-### 🔹 Header
-
-```
-X-API-KEY: supersecret123
-```
-
----
 
 ## 🔒 Güvenlik Özellikleri
 
 | Özellik | Açıklama |
 |----------|-----------|
-| 🔑 **API Key Doğrulama** | Her API isteğinde özel bir anahtar (`X-API-KEY`) doğrulanır. |
-| 🧬 **AES 256 Connection String Şifreleme** | Frontend’de CryptoJS ile şifrelenir, backend’de çözülür. |
 | 🧾 **Loglama** | Her istek `logs/app_log.txt` dosyasına kaydedilir. |
 | 🚨 **Exception Yönetimi** | SQL, ağ veya JSON hataları kullanıcıya açıklayıcı şekilde döner. |
 
@@ -174,6 +149,9 @@ DynamicChartVisualizer/
 │
 └── README.md
 ```
+<img width="1297" height="870" alt="image" src="https://github.com/user-attachments/assets/60e47fd4-504c-4605-86f0-34a9ad0d09a4" />
+<img width="1567" height="642" alt="image" src="https://github.com/user-attachments/assets/008aaed8-cb0f-4e62-877f-71e1ae60ffa6" />
+
 
 --
 ---
